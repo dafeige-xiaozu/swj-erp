@@ -25,9 +25,7 @@ export function DashboardPage() {
     samples, 
     qcRecords,
     users,
-    getCustomerById, 
-    getProductById,
-    getUserById
+    getCustomerById
   } = useAppStore()
 
   // ===== Sales Dashboard Stats =====
@@ -169,22 +167,6 @@ export function DashboardPage() {
     acc[r.inspectType] = (acc[r.inspectType] || 0) + 1
     return acc
   }, {} as Record<string, number>)
-
-  // QC trend - last 6 months
-  const qcTrend = Array.from({ length: 6 }, (_, i) => {
-    const month = new Date(currentYear, currentMonth - 5 + i, 1)
-    const monthRecords = qcRecords.filter(r => {
-      const inspectDate = new Date(r.inspectDate)
-      return inspectDate.getMonth() === month.getMonth() && 
-             inspectDate.getFullYear() === month.getFullYear()
-    })
-    const passCount = monthRecords.filter(r => r.result === 'PASS').length
-    return {
-      month: month.toLocaleDateString('zh-CN', { month: 'short' }),
-      total: monthRecords.length,
-      passRate: monthRecords.length > 0 ? ((passCount / monthRecords.length) * 100).toFixed(0) : 100
-    }
-  })
 
   const typeLabels: Record<string, string> = {
     BRAND: '品牌商',

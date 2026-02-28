@@ -7,11 +7,9 @@ import {
   FlaskConical, 
   ClipboardCheck,
   MessageSquare,
-  Menu,
-  X,
   ChevronRight,
-  LogOut,
-  Cake
+  Cake,
+  MoreHorizontal
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/lib/store'
@@ -28,44 +26,50 @@ interface LayoutProps {
 
 const menuItems: { id: Page; label: string; icon: React.ElementType }[] = [
   { id: 'dashboard', label: '工作台', icon: LayoutDashboard },
-  { id: 'customers', label: '客户档案', icon: Users },
-  { id: 'orders', label: '订单管理', icon: ShoppingCart },
-  { id: 'quotes', label: '报价管理', icon: FileText },
-  { id: 'samples', label: '打样管理', icon: FlaskConical },
-  { id: 'qc', label: '品控管理', icon: ClipboardCheck },
-  { id: 'followups', label: '跟进记录', icon: MessageSquare },
-  { id: 'analytics', label: '数据看板', icon: BarChart3 },
+  { id: 'customers', label: '客户', icon: Users },
+  { id: 'orders', label: '订单', icon: ShoppingCart },
+  { id: 'quotes', label: '报价', icon: FileText },
+  { id: 'samples', label: '打样', icon: FlaskConical },
+  { id: 'qc', label: '品控', icon: ClipboardCheck },
+  { id: 'followups', label: '跟进', icon: MessageSquare },
+  { id: 'analytics', label: '看板', icon: BarChart3 },
 ]
+
+// 移动端底部导航显示的主要项目
+const mobileMainItems = menuItems.slice(0, 4)
+const mobileMoreItems = menuItems.slice(4)
 
 export function Layout({ children, currentPage, onPageChange }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false)
   const currentUser = useAppStore((state) => state.currentUser)
 
+  const isInMoreItems = mobileMoreItems.some(item => item.id === currentPage)
+
   return (
-    <div className="min-h-screen bg-bg-secondary flex">
-      {/* Mobile menu button */}
-      <button
-        onClick={() => setMobileMenuOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md"
-      >
-        <Menu className="w-5 h-5 text-gray-600" />
-      </button>
+    <div className="h-full bg-bg-secondary flex flex-col md:flex-row overflow-hidden">
+      {/* Mobile Header */}
+      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200 flex-shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center">
+            <Cake className="w-5 h-5 text-white" />
+          </div>
+          <span className="font-semibold text-gray-900">烘焙CRM</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+            <span className="text-xs font-semibold text-white">
+              {currentUser?.name.charAt(0)}
+            </span>
+          </div>
+        </div>
+      </header>
 
-      {/* Mobile sidebar overlay */}
-      {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
+      {/* Desktop Sidebar */}
       <aside
         className={cn(
-          'fixed lg:static inset-y-0 left-0 z-50 flex flex-col bg-bg-sidebar text-white transition-all duration-300',
-          sidebarOpen ? 'w-64' : 'w-20',
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          'hidden md:flex flex-col bg-bg-sidebar text-white transition-all duration-300 flex-shrink-0',
+          sidebarOpen ? 'w-64' : 'w-20'
         )}
       >
         {/* Logo */}
@@ -79,17 +83,10 @@ export function Layout({ children, currentPage, onPageChange }: LayoutProps) {
               <p className="text-xs text-gray-400">管理系统</p>
             </div>
           )}
-          {/* Close button for mobile */}
-          <button
-            onClick={() => setMobileMenuOpen(false)}
-            className="lg:hidden ml-auto p-1 hover:bg-white/10 rounded"
-          >
-            <X className="w-5 h-5" />
-          </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-4 overflow-y-auto">
+        <nav className="flex-1 py-4 overflow-y-auto scrollable-content">
           <ul className="space-y-1 px-3">
             {menuItems.map((item) => {
               const Icon = item.icon
@@ -98,10 +95,7 @@ export function Layout({ children, currentPage, onPageChange }: LayoutProps) {
               return (
                 <li key={item.id}>
                   <button
-                    onClick={() => {
-                      onPageChange(item.id)
-                      setMobileMenuOpen(false)
-                    }}
+                    onClick={() => onPageChange(item.id)}
                     className={cn(
                       'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200',
                       isActive 
@@ -145,10 +139,10 @@ export function Layout({ children, currentPage, onPageChange }: LayoutProps) {
           </div>
         </div>
 
-        {/* Collapse button - desktop only */}
+        {/* Collapse button */}
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="hidden lg:flex items-center justify-center py-3 border-t border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+          className="flex items-center justify-center py-3 border-t border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
         >
           <ChevronRight className={cn(
             'w-5 h-5 transition-transform',
@@ -158,11 +152,85 @@ export function Layout({ children, currentPage, onPageChange }: LayoutProps) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 min-w-0 lg:ml-0">
-        <div className="p-4 lg:p-8 pt-16 lg:pt-8">
+      <main className="flex-1 min-w-0 flex flex-col overflow-hidden">
+        <div className="flex-1 overflow-y-auto scrollable-content p-4 md:p-6 lg:p-8 pb-20 md:pb-8">
           {children}
         </div>
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex items-center justify-around z-50 bottom-nav-safe">
+        {mobileMainItems.map((item) => {
+          const Icon = item.icon
+          const isActive = currentPage === item.id
+          
+          return (
+            <button
+              key={item.id}
+              onClick={() => {
+                onPageChange(item.id)
+                setMoreMenuOpen(false)
+              }}
+              className={cn(
+                'flex flex-col items-center justify-center py-2 px-3 min-w-[60px] transition-colors',
+                isActive ? 'text-primary-600' : 'text-gray-500'
+              )}
+            >
+              <Icon className="w-5 h-5" />
+              <span className="text-xs mt-1 font-medium">{item.label}</span>
+            </button>
+          )
+        })}
+        
+        {/* More button */}
+        <div className="relative">
+          <button
+            onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+            className={cn(
+              'flex flex-col items-center justify-center py-2 px-3 min-w-[60px] transition-colors',
+              isInMoreItems || moreMenuOpen ? 'text-primary-600' : 'text-gray-500'
+            )}
+          >
+            <MoreHorizontal className="w-5 h-5" />
+            <span className="text-xs mt-1 font-medium">更多</span>
+          </button>
+          
+          {/* More menu popup */}
+          {moreMenuOpen && (
+            <>
+              <div 
+                className="fixed inset-0 z-40"
+                onClick={() => setMoreMenuOpen(false)}
+              />
+              <div className="absolute bottom-full right-0 mb-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50 min-w-[140px]">
+                {mobileMoreItems.map((item) => {
+                  const Icon = item.icon
+                  const isActive = currentPage === item.id
+                  
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        onPageChange(item.id)
+                        setMoreMenuOpen(false)
+                      }}
+                      className={cn(
+                        'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors',
+                        isActive 
+                          ? 'bg-primary-50 text-primary-600' 
+                          : 'text-gray-700 hover:bg-gray-50'
+                      )}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </>
+          )}
+        </div>
+      </nav>
     </div>
   )
 }

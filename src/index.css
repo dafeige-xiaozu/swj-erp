@@ -4,6 +4,14 @@
 /* Professional CRM theme with warm bakery-inspired accent colors */
 
 @theme {
+  /* ===== Responsive Breakpoints ===== */
+  /* 四档响应式断点 */
+  --breakpoint-xs: 430px;   /* iPhone */
+  --breakpoint-sm: 431px;   /* 大屏手机 */
+  --breakpoint-md: 768px;   /* iPad */
+  --breakpoint-lg: 1024px;  /* iPad Pro / Desktop */
+  --breakpoint-xl: 1280px;  /* 大屏桌面 */
+
   /* Primary Colors - Professional Blue */
   --color-primary-50: #eff6ff;
   --color-primary-100: #dbeafe;
@@ -132,12 +140,30 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  /* 禁用长按菜单 */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* 允许输入框选择文本 */
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 html {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* 防止页面滚动 */
+  overflow: hidden;
+  height: 100%;
+  /* 适配刘海和底部横条 */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 body {
@@ -146,30 +172,51 @@ body {
   background-color: var(--color-bg-secondary);
   color: var(--color-text-primary);
   line-height: 1.5;
+  overflow: hidden;
+  height: 100%;
+  /* 禁止触摸时页面弹性滚动 */
+  overscroll-behavior: none;
+  /* 禁止双击缩放 */
+  touch-action: manipulation;
 }
 
 #root {
-  min-height: 100vh;
+  height: 100%;
+  overflow: hidden;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Custom Scrollbar - Desktop only */
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-gray-100);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-gray-300);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gray-400);
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-gray-100);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-gray-300);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gray-400);
+/* 移动端隐藏滚动条 */
+@media (max-width: 1023px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
 }
 
 /* Focus Styles */
@@ -182,4 +229,59 @@ body {
 ::selection {
   background-color: var(--color-primary-100);
   color: var(--color-primary-900);
+}
+
+/* ===== Responsive Breakpoints ===== */
+/* 
+  四档响应式断点:
+  - xs: ≤430px (iPhone)
+  - sm: 431-767px (大屏手机)
+  - md: ≥768px (iPad)
+  - lg: ≥1024px (iPad Pro / Desktop)
+*/
+
+/* Mobile-first responsive utilities */
+.container-mobile {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container-mobile {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-mobile {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Safe area utilities */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+.mb-safe {
+  margin-bottom: env(safe-area-inset-bottom);
+}
+
+/* 移动端底部导航适配 */
+.bottom-nav-safe {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+}
+
+/* 可滚动内容区域 */
+.scrollable-content {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }

@@ -5,7 +5,6 @@ import {
   FileText,
   MoreVertical,
   Edit,
-  Trash2,
   Eye,
   Check,
   X,

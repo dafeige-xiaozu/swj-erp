@@ -3,7 +3,6 @@ import {
   Plus, 
   Search, 
   ClipboardCheck,
-  MoreVertical,
   Eye,
   CheckCircle,
   XCircle,
@@ -30,7 +29,6 @@ import {
   qcResultConfig
 } from '@/types'
 import { formatDateTime } from '@/lib/utils'
-import { cn } from '@/lib/utils'
 
 export function QcPage() {
   const { 

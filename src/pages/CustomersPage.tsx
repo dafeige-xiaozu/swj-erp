@@ -8,8 +8,7 @@ import {
   MoreVertical,
   Edit,
   Trash2,
-  Eye,
-  Filter
+  Eye
 } from 'lucide-react'
 import { 
   Button, 
@@ -29,8 +28,7 @@ import type {
 } from '@/types'
 import {
   customerStatusConfig, 
-  customerTypeConfig,
-  userRoleConfig
+  customerTypeConfig
 } from '@/types'
 import { formatDate } from '@/lib/utils'
 
@@ -218,7 +216,6 @@ export function CustomersPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {filteredCustomers.map((customer) => {
-            const owner = users.find(u => u.id === customer.ownerId)
             const orderCount = getOrdersByCustomerId(customer.id).length
             
             return (

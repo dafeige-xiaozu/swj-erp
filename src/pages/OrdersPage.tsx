@@ -4,7 +4,6 @@ import {
   Search, 
   Package,
   Calendar,
-  Truck,
   MoreVertical,
   Edit,
   Trash2,

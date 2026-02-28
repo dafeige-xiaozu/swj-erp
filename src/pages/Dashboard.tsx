@@ -77,15 +77,15 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">工作台</h1>
-        <p className="text-gray-500 mt-1">欢迎回来，今天是 {formatDate(new Date())}</p>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900">工作台</h1>
+        <p className="text-sm md:text-base text-gray-500 mt-1">欢迎回来，今天是 {formatDate(new Date())}</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         {stats.map((stat) => {
           const Icon = stat.icon
           return (
@@ -96,11 +96,11 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm text-gray-500">{stat.label}</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                  <p className="text-xs md:text-sm text-gray-500">{stat.label}</p>
+                  <p className="text-2xl md:text-3xl font-bold text-gray-900 mt-1">{stat.value}</p>
                 </div>
-                <div className={`${stat.color} p-3 rounded-xl`}>
-                  <Icon className="w-6 h-6 text-white" />
+                <div className={`${stat.color} p-2 md:p-3 rounded-lg md:rounded-xl`}>
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 </div>
               </div>
             </Card>
@@ -110,19 +110,19 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
       {/* Monthly Sales */}
       <Card>
-        <div className="flex items-center gap-4">
-          <div className="p-4 bg-gradient-to-br from-accent-400 to-accent-600 rounded-2xl">
-            <TrendingUp className="w-8 h-8 text-white" />
+        <div className="flex items-center gap-3 md:gap-4">
+          <div className="p-3 md:p-4 bg-gradient-to-br from-accent-400 to-accent-600 rounded-xl md:rounded-2xl">
+            <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-white" />
           </div>
           <div>
-            <p className="text-sm text-gray-500">本月销售额</p>
-            <p className="text-3xl font-bold text-gray-900">{formatCurrency(monthlySales)}</p>
-            <p className="text-sm text-gray-400">{monthlyOrders.length} 笔订单</p>
+            <p className="text-xs md:text-sm text-gray-500">本月销售额</p>
+            <p className="text-2xl md:text-3xl font-bold text-gray-900">{formatCurrency(monthlySales)}</p>
+            <p className="text-xs md:text-sm text-gray-400">{monthlyOrders.length} 笔订单</p>
           </div>
         </div>
       </Card>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-4 md:gap-6">
         {/* Urgent Orders */}
         <Card>
           <CardHeader>
